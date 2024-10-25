@@ -7,6 +7,7 @@ public class CameraControl : MonoBehaviour
     //Camera control variables
     public float sensitivity = 100f;
     public Transform body;
+
     private float xRotation = 0f;
 
 
