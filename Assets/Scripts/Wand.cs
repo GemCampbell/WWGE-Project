@@ -12,16 +12,26 @@ public class Wand : MonoBehaviour
     public Camera cam;
 
 
-    //Variables for timer
-    public float timer;
-    public float timerMax;
+    //Variables for firing
+    public float shootTimer;
+    public float shootTimerMax;
     bool canShoot;
+
+
+    //Variables for reload system
+    public int currentAmmo;
+    public int maxAmmo;
+    public float reloadTimer = 2f;
+    public float reloadTimerMax;
+    bool isReloading;    
 
     
     
     void Start()
     {
         canShoot = true;
+        isReloading = false;
+        currentAmmo = maxAmmo;
     }
 
     
@@ -31,22 +41,34 @@ public class Wand : MonoBehaviour
     {
         MoveWithPlayer();
         
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && currentAmmo > 0 && canShoot == true)
         {
             Fire();
+            currentAmmo--;
             canShoot = false;
         }
 
         //Timer between shots
         if (canShoot == false)
         {
-            timer = timer + Time.deltaTime;
+            shootTimer = shootTimer + Time.deltaTime;
 
-            if (timer > timerMax)
+            if (shootTimer > shootTimerMax)
             {
                 canShoot = true;
-                timer = 0;
+                shootTimer = 0;
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.R) && currentAmmo == 0)
+        {
+            isReloading = true;
+        }
+
+        
+        if (isReloading == true)
+        {
+            Reload();
         }
     }
 
@@ -66,6 +88,19 @@ public class Wand : MonoBehaviour
         {
             print("I am looking at nothing!");
         }
+    }
+
+
+    public void Reload()
+    {
+        reloadTimer = reloadTimer + Time.deltaTime;
+
+            if (reloadTimer > reloadTimerMax)
+            {
+                currentAmmo = maxAmmo;
+                isReloading = false;
+                reloadTimer = 0;
+            }       
     }
 
 
